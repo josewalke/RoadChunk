@@ -1,0 +1,64 @@
+# Archivos y carpetas generados automáticamente por Unity
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Mm]emoryCaptures/
+*.stacktrace
+
+# Ignorar archivos relacionados con IDEs
+.vscode/
+.idea/
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+
+# Ignorar archivos específicos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Ignorar archivos relacionados con Unity Collab
+.Collab/
+
+# Ignorar paquetes específicos del proyecto
+*.apk
+*.unitypackage
+
+# Archivos de cache de paquetes
+/Assets/AssetStoreTools*
+
+# Archivos de configuraciones personales (innecesarios para otros desarrolladores)
+*.csproj
+*.unityproj
+*.sln
+*.swp
+*.tmp
+*.log
+*.obj
+*.pch
+*.pdb
+
+# Ignorar configuraciones específicas de Visual Studio
+*.vcxproj
+*.vcxproj.user
+*.vcxproj.filters
+
+# Ignorar configuraciones específicas de Rider
+.idea/
+*.idea/**/workspace.xml
+*.idea/**/tasks.xml
+*.idea/**/usage.statistics.xml
+*.idea/**/dictionaries
+*.idea/**/shelf
+
+# Ignorar carpetas y archivos de paquetes de Unity
+/Packages/com.unity.*
+/Packages/com.unity.collab-proxy
+
+# Ignorar carpetas de builds específicas
+/Builds/
