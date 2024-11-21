@@ -1,0 +1,27 @@
+﻿<Properties StartupConfiguration="{7735278C-802C-83FA-6DA2-5C668B0B2A3C}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Script/TerrainManager.cs">
+    <Files>
+      <File FileName="Assets/Script/Chunk.cs" Line="1" Column="1" />
+      <File FileName="Assets/Script/IChunk.cs" Line="1" Column="1" />
+      <File FileName="Assets/Script/IPathGenerator.cs" Line="1" Column="19" />
+      <File FileName="Assets/Script/PathGenerator.cs" Line="54" Column="1" />
+      <File FileName="Assets/Script/TerrainRenderer.cs" Line="38" Column="1" />
+      <File FileName="Assets/Script/TerrainManager.cs" Line="49" Column="1" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="RoadChunks" expanded="True" selected="True" />
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.Unity.CollabProxy.Editor PreferredExecutionTarget="6a7ac055-0b2b-4607-a7b5-243b0643bacc" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="ab216da6-9366-4601-b742-1e73f8a219cd" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
