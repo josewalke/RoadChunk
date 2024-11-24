@@ -299,8 +299,8 @@
     <Compile Include="Library/PackageCache/com.unity.timeline@1.7.6/Editor/Manipulators/Utils/EditModeReplaceUtils.cs" />
     <Compile Include="Library/PackageCache/com.unity.timeline@1.7.6/Editor/Actions/Invoker.cs" />
     <Compile Include="Library/PackageCache/com.unity.timeline@1.7.6/Editor/Utilities/ControlPlayableUtility.cs" />
-    <Compile Include="Library/PackageCache/com.unity.timeline@1.7.6/Editor/Attributes/ShortcutAttribute.cs" />
     <Compile Include="Library/PackageCache/com.unity.timeline@1.7.6/Editor/inspectors/ClipInspector/ClipInspector.cs" />
+    <Compile Include="Library/PackageCache/com.unity.timeline@1.7.6/Editor/Attributes/ShortcutAttribute.cs" />
     <Compile Include="Library/PackageCache/com.unity.timeline@1.7.6/Editor/inspectors/TrackAssetInspector.cs" />
     <Compile Include="Library/PackageCache/com.unity.timeline@1.7.6/Editor/Utilities/Scopes/PropertyScope.cs" />
     <Compile Include="Library/PackageCache/com.unity.timeline@1.7.6/Editor/treeview/TimelineDragging.cs" />

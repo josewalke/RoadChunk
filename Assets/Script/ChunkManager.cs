@@ -7,38 +7,33 @@ public class ChunkManager : MonoBehaviour
 
     void Start()
     {
-        if (cubePrefab == null)
-        {
-            Debug.LogError("Prefab de cubo no asignado.");
-            return;
-        }
-
-        // Crear el contenedor para el primer chunk
-        GameObject chunkContainer = new GameObject("Chunk");
+        // Crear el contenedor para el chunk
+        GameObject chunkContainer = new GameObject("ChunkContainer");
         chunkContainer.transform.SetParent(transform);
 
-        // Crear el generador del chunk
-        ChunkGenerator chunkGenerator = new ChunkGenerator(cubePrefab, chunkContainer.transform);
+        // Añadir y configurar FirstChunkHandler primero
+        FirstChunkHandler firstChunkHandler = AddFirstChunkHandler(chunkContainer);
 
-        // Generar el primer chunk
-        chunkGenerator.GenerateChunk(chunkSize);
+        // Configurar el tamaño del chunk en FirstChunkHandler
+        firstChunkHandler.chunkSize = chunkSize;
 
-        // Asignar la script FirstChunkHandler al contenedor del chunk
-        AddFirstChunkHandler(chunkContainer);
+        Debug.Log("Script FirstChunkHandler asignado y configurado al primer chunk.");
     }
 
     /// <summary>
     /// Asigna la script FirstChunkHandler al contenedor del primer chunk.
     /// </summary>
     /// <param name="chunkContainer">El GameObject que contiene el primer chunk.</param>
-    private void AddFirstChunkHandler(GameObject chunkContainer)
+    /// <returns>La instancia de FirstChunkHandler añadida.</returns>
+    private FirstChunkHandler AddFirstChunkHandler(GameObject chunkContainer)
     {
         // Añadir la script FirstChunkHandler
         FirstChunkHandler firstChunkHandler = chunkContainer.AddComponent<FirstChunkHandler>();
 
-        // Configurar el tamaño del chunk en la script
-        firstChunkHandler.chunkSize = chunkSize;
+        // Configurar el prefab del cubo
+        firstChunkHandler.cubePrefab = cubePrefab;
 
-        Debug.Log("Script FirstChunkHandler asignado al primer chunk.");
+        Debug.Log("FirstChunkHandler configurado.");
+        return firstChunkHandler;
     }
 }

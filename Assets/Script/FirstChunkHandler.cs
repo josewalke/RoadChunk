@@ -1,180 +1,116 @@
 using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 public class FirstChunkHandler : MonoBehaviour
 {
-    public string prefabName = "ChunkPrefab"; // Nombre del prefab a cargar desde Resources
-    private GameObject chunkPrefab; // Prefab para generar nuevos chunks
-    public Vector3Int chunkSize = new Vector3Int(13, 13, 2); // Tamaño del chunk
-    private int[,] level0Matrix; // Matriz para representar el estado de los cubos en el nivel 0
-    private List<GameObject> allCubes; // Lista para almacenar todos los cubos en secuencia
-    private List<Vector2Int> path; // Lista para almacenar el camino generado
+    public GameObject cubePrefab; // Prefab del cubo
+    private GameObject chunkPrefab; // Prefab del chunk cargado por código
+    public Vector3Int chunkSize = new Vector3Int(13, 13, 2); // Dimensiones del chunk
+    public float blockSpacing = 1.0f; // Espaciado entre los bloques
 
-    public float paintInterval = 1f; // Tiempo entre pintar cubos en segundos
+    private List<GameObject> level0Cubes; // Lista que almacena todos los cubos del nivel 0
 
     void Start()
     {
-        // Cargar el prefab dinámicamente
+        // Cargar el prefab del chunk
         LoadChunkPrefab();
 
-        // Inicializa la lista para todos los cubos
-        allCubes = new List<GameObject>();
+        // Generar el chunk inicial
+        GenerateChunk();
 
-        // Inicializa la matriz
-        level0Matrix = new int[chunkSize.x, chunkSize.z];
-
-        // Llena la lista con los cubos generados
-        PopulateCubeList();
-
-        // Generar el camino en el primer chunk
-        GeneratePathFromCenter();
-
-        // Pintar el camino
-        StartCoroutine(PaintPath(paintInterval));
+        // Añadir la script PathPainter y pasarle los cubos del nivel 0
+        AddPathPainter();
     }
 
     /// <summary>
-    /// Carga el prefab dinámicamente desde la carpeta Resources.
+    /// Carga el prefab del chunk desde la carpeta Resources.
     /// </summary>
     private void LoadChunkPrefab()
     {
-        chunkPrefab = Resources.Load<GameObject>(prefabName);
-
+        chunkPrefab = Resources.Load<GameObject>("ChunkPrefab");
         if (chunkPrefab == null)
         {
-            Debug.LogError($"No se encontró el prefab '{prefabName}' en la carpeta Resources.");
+            Debug.LogError("No se encontró el prefab del chunk en ChunkPrefab.");
         }
         else
         {
-            Debug.Log($"Prefab '{prefabName}' cargado correctamente.");
+            Debug.Log("Prefab del chunk cargado correctamente.");
         }
     }
 
     /// <summary>
-    /// Llena la lista con referencias a los cubos hijos.
+    /// Genera un chunk de bloques organizados en una cuadrícula 3D y guarda los cubos del nivel 0.
     /// </summary>
-    private void PopulateCubeList()
+    private void GenerateChunk()
     {
-        foreach (Transform child in transform)
+        level0Cubes = new List<GameObject>();
+        int blockIndex = 0; // Contador para asignar nombres consecutivos
+
+        for (int x = 0; x < chunkSize.x; x++) // Recorrer ancho
         {
-            if (child.name.StartsWith("Block_"))
+            for (int y = 0; y < chunkSize.y; y++) // Recorrer niveles (altura)
             {
-                allCubes.Add(child.gameObject);
-            }
-        }
-
-        Debug.Log($"Total de cubos almacenados en la lista: {allCubes.Count}");
-    }
-
-    /// <summary>
-    /// Genera un camino desde el centro hasta un borde adyacente.
-    /// </summary>
-    private void GeneratePathFromCenter()
-    {
-        int startX = chunkSize.x / 2;
-        int startZ = chunkSize.z / 2;
-
-        path = new List<Vector2Int>();
-        path.Add(new Vector2Int(startX, startZ));
-
-        Vector2Int currentPosition = new Vector2Int(startX, startZ);
-        while (!IsAtEdge(currentPosition, chunkSize))
-        {
-            Vector2Int nextStep = GetRandomDirection(currentPosition, level0Matrix);
-            level0Matrix[nextStep.x, nextStep.y] = 1;
-            path.Add(nextStep);
-            currentPosition = nextStep;
-        }
-
-        Debug.Log($"Camino generado con {path.Count} cubos.");
-    }
-
-    /// <summary>
-    /// Coroutine para pintar el camino cubo por cubo.
-    /// </summary>
-    /// <param name="interval">Tiempo de espera entre cada pintado.</param>
-    private IEnumerator PaintPath(float interval)
-    {
-        foreach (Vector2Int position in path)
-        {
-            int cubeIndex = (position.y * chunkSize.x) + position.x;
-
-            GameObject cube = allCubes[cubeIndex];
-
-            if (cube != null)
-            {
-                Renderer renderer = cube.GetComponent<Renderer>();
-                if (renderer != null)
+                for (int z = 0; z < chunkSize.z; z++) // Recorrer profundidad
                 {
-                    renderer.material.color = Color.red;
+                    // Calcular la posición del bloque
+                    Vector3 blockPosition = new Vector3(
+                        x * blockSpacing,
+                        y * blockSpacing,
+                        z * blockSpacing
+                    );
+
+                    // Instanciar el bloque
+                    GameObject block = Instantiate(cubePrefab, blockPosition, Quaternion.identity, transform);
+
+                    // Asignar un nombre consecutivo al bloque
+                    block.name = $"Block {blockIndex}";
+                    blockIndex++;
+
+                    // Si el bloque está en el nivel 0, guardarlo
+                    if (y == 0)
+                    {
+                        level0Cubes.Add(block);
+                    }
                 }
             }
-
-            yield return new WaitForSeconds(interval); // Usar el intervalo proporcionado
         }
 
-        Debug.Log("Camino completado. Generando nuevo chunk...");
-        GenerateNewChunk();
+        Debug.Log($"Chunk generado con {blockIndex} bloques. Nivel 0 tiene {level0Cubes.Count} bloques.");
     }
 
     /// <summary>
-    /// Genera un nuevo chunk conectado al actual.
+    /// Añade la script PathPainter al contenedor del chunk y le pasa los cubos del nivel 0.
     /// </summary>
-    private void GenerateNewChunk()
+    private void AddPathPainter()
+    {
+        PathPainter pathPainter = gameObject.AddComponent<PathPainter>();
+        pathPainter.Initialize(level0Cubes, chunkSize, this);
+
+        Debug.Log("Script PathPainter añadido y configurado.");
+    }
+
+    /// <summary>
+    /// Genera un nuevo chunk en la dirección adyacente al último bloque del camino.
+    /// </summary>
+    public void CreateNewChunk(Vector3 exitDirection)
     {
         if (chunkPrefab == null)
         {
-            Debug.LogError("chunkPrefab no está asignado. Asegúrate de cargarlo correctamente.");
+            Debug.LogError("Prefab del chunk no cargado. Asegúrate de que esté en ChunkPrefab.");
             return;
         }
 
-        Vector2Int lastPosition = path[path.Count - 1]; // Última posición del camino en el primer chunk
-        Vector3 newChunkPosition = transform.position; // Posición base del nuevo chunk
-
-        // Determinar la dirección del nuevo chunk según la salida del camino
-        if (lastPosition.x == 0) // Izquierda
-            newChunkPosition += new Vector3(-chunkSize.x, 0, 0);
-        else if (lastPosition.x == chunkSize.x - 1) // Derecha
-            newChunkPosition += new Vector3(chunkSize.x, 0, 0);
-        else if (lastPosition.y == 0) // Abajo
-            newChunkPosition += new Vector3(0, 0, -chunkSize.z);
-        else if (lastPosition.y == chunkSize.z - 1) // Arriba
-            newChunkPosition += new Vector3(0, 0, chunkSize.z);
+        // Calcular la posición del nuevo chunk
+        Vector3 newChunkPosition = transform.position + exitDirection * (chunkSize.x * blockSpacing);
 
         // Instanciar el nuevo chunk
         GameObject newChunk = Instantiate(chunkPrefab, newChunkPosition, Quaternion.identity);
 
-        Debug.Log("Nuevo chunk generado.");
-    }
+        // Añadir el componente ChunkGenerator al nuevo chunk
+        ChunkGenerator chunkGenerator = newChunk.AddComponent<ChunkGenerator>();
+        chunkGenerator.Initialize(cubePrefab, newChunk.transform);
+        chunkGenerator.chunkSize = chunkSize;
 
-    /// <summary>
-    /// Devuelve true si la posición está en un borde de la matriz.
-    /// </summary>
-    private bool IsAtEdge(Vector2Int position, Vector3Int size)
-    {
-        return position.x == 0 || position.x == size.x - 1 || position.y == 0 || position.y == size.z - 1;
-    }
-
-    /// <summary>
-    /// Devuelve una dirección aleatoria válida desde la posición actual en la matriz dada.
-    /// </summary>
-    private Vector2Int GetRandomDirection(Vector2Int currentPosition, int[,] matrix)
-    {
-        List<Vector2Int> directions = new List<Vector2Int>();
-
-        if (currentPosition.x > 0 && matrix[currentPosition.x - 1, currentPosition.y] == 0)
-            directions.Add(new Vector2Int(currentPosition.x - 1, currentPosition.y)); // Izquierda
-
-        if (currentPosition.x < chunkSize.x - 1 && matrix[currentPosition.x + 1, currentPosition.y] == 0)
-            directions.Add(new Vector2Int(currentPosition.x + 1, currentPosition.y)); // Derecha
-
-        if (currentPosition.y > 0 && matrix[currentPosition.x, currentPosition.y - 1] == 0)
-            directions.Add(new Vector2Int(currentPosition.x, currentPosition.y - 1)); // Abajo
-
-        if (currentPosition.y < chunkSize.z - 1 && matrix[currentPosition.x, currentPosition.y + 1] == 0)
-            directions.Add(new Vector2Int(currentPosition.x, currentPosition.y + 1)); // Arriba
-
-        return directions[Random.Range(0, directions.Count)];
+        Debug.Log($"Nuevo chunk creado en la posición: {newChunkPosition} con el componente ChunkGenerator añadido.");
     }
 }

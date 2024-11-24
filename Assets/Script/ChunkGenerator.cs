@@ -2,9 +2,20 @@ using UnityEngine;
 
 public class ChunkGenerator : MonoBehaviour
 {
-    public GameObject cubePrefab; // Prefab del cubo
+    private GameObject cubePrefab; // Prefab del cubo
+    private Transform chunkContainer; // Contenedor de los bloques del chunk
+
     public Vector3Int chunkSize = new Vector3Int(13, 13, 2); // Dimensiones del chunk
     public float blockSpacing = 1.0f; // Espaciado entre los bloques
+
+    /// <summary>
+    /// Configura el generador de chunks.
+    /// </summary>
+    public void Initialize(GameObject cubePrefab, Transform chunkContainer)
+    {
+        this.cubePrefab = cubePrefab;
+        this.chunkContainer = chunkContainer;
+    }
 
     void Start()
     {
@@ -12,19 +23,15 @@ public class ChunkGenerator : MonoBehaviour
     }
 
     /// <summary>
-    /// Genera un chunk de bloques organizados en una cuadrícula con nombres consecutivos.
+    /// Genera un chunk de bloques organizados en una cuadrícula.
     /// </summary>
     private void GenerateChunk()
     {
-        if (cubePrefab == null)
+        if (cubePrefab == null || chunkContainer == null)
         {
-            Debug.LogError("El prefab del cubo no está asignado.");
+            Debug.LogError("ChunkGenerator no está inicializado correctamente.");
             return;
         }
-
-        // Contenedor para los bloques del chunk
-        GameObject chunkContainer = new GameObject("ChunkContainer");
-        chunkContainer.transform.SetParent(transform);
 
         int blockIndex = 0; // Contador para asignar nombres consecutivos
 
@@ -43,11 +50,11 @@ public class ChunkGenerator : MonoBehaviour
                     );
 
                     // Instanciar el bloque
-                    GameObject block = Instantiate(cubePrefab, blockPosition, Quaternion.identity, chunkContainer.transform);
+                    GameObject block = Instantiate(cubePrefab, blockPosition, Quaternion.identity, chunkContainer);
 
                     // Asignar un nombre consecutivo al bloque
                     block.name = $"Block {blockIndex}";
-                    blockIndex++; // Incrementar el contador de bloques
+                    blockIndex++;
                 }
             }
         }
