@@ -320,7 +320,7 @@ GameObject:
   - component: {fileID: 1286749030}
   - component: {fileID: 1286749031}
   m_Layer: 0
-  m_Name: TerrainManager
+  m_Name: ChunkManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -350,14 +350,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1286749029}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1bba487c5ac85465f929a5f7edf92c8c, type: 3}
+  m_Script: {fileID: 11500000, guid: 9834ccbfb98fd4711a197574b671a529, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chunkPrefab: {fileID: 8518279510856372059, guid: 265eedba679f34cad98faf9de064c194, type: 3}
   cubePrefab: {fileID: 7635155884826619509, guid: 1050cc70b3d4c481483963dac2ac07f6, type: 3}
-  terrainMaterial: {fileID: 2100000, guid: ec24dddf35265477186efeb4225a4393, type: 2}
-  chunkSize: {x: 13, y: 13, z: 2}
-  timeBetweenCubes: 0.3
+  chunkSize: {x: 13, y: 2, z: 13}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

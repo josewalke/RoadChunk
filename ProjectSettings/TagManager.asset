@@ -5,7 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Cube
-  - EdgeCube
+  - Path
   layers:
   - Default
   - TransparentFX
